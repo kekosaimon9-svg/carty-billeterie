@@ -10,7 +10,7 @@ app.use(cookieParser());
 // En environnement de dev local, on sert le dossier public statiquement
 // Sur Vercel, c'est géré par vercel.json
 if (!process.env.VERCEL) {
-    app.use(express.static(path.join(__dirname, '../public')));
+    app.use(express.static(__dirname + '/..'));
 }
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://uztprrunvtzcjfkaxdiw.supabase.co';
