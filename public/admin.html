@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Admin - SHOWCASE CARTY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">← Retour Accueil</a>
+        <div><span class="ws-status" id="ws-status" title="Statut temps réel"></span></div>
+    </header>
+
+    <div class="container">
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Section Login -->
+        <div id="login-section" class="card">
+            <h2>Accès Administrateur</h2>
+            <div class="form-group">
+                <label for="admin-code">Code d'accès :</label>
+                <input type="password" id="admin-code" class="form-control" maxlength="4" placeholder="****">
+            </div>
+            <button id="btn-login" class="btn btn-primary" style="width: 100%;">Valider</button>
+        </div>
+
+        <!-- Section Dashboard (cachée par défaut) -->
+        <div id="dashboard-section" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Tableau de Bord</h2>
+                <button id="btn-logout" class="btn btn-small btn-secondary">Déconnexion</button>
+            </div>
+
+            <!-- Total Global -->
+            <div class="card">
+                <h3>Total Global</h3>
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <p>Billets vendus : <strong id="global-sales">0</strong> / <span id="global-quota">0</span></p>
+                    <p style="color: var(--success); font-weight: 900; font-size: 1.2rem;" id="global-revenue">0 DH</p>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="global-progress"></div>
+                </div>
+            </div>
+
+            <!-- Ajouter un vendeur -->
+            <div class="card">
+                <h3>Ajouter un vendeur</h3>
+                <div class="form-group">
+                    <input type="text" id="new-vendor-name" class="form-control" placeholder="Nom du vendeur">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-vendor-quota" class="form-control" placeholder="Quota" min="1">
+                </div>
+                <button id="btn-add-vendor" class="btn btn-secondary">Ajouter</button>
+            </div>
+
+            <!-- Liste des vendeurs -->
+            <h3>Liste des Vendeurs</h3>
+            <div id="vendors-list">
+                <!-- Rempli en JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
