@@ -4,28 +4,30 @@ let ws;
 const isAdminPage = window.location.pathname.includes('admin.html');
 const isVendorPage = window.location.pathname.includes('vendeur.html');
 
-// Initialisation WebSocket
+// Initialisation Supabase Client & Realtime
+const supabaseUrl = 'https://uztprrunvtzcjfkaxdiw.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dHBycnVudnR6Y2pma2F4ZGl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyOTk2NDcsImV4cCI6MjEwNTg3NTY0N30.gTOJ7xI3RXLRW7ejjgajhYc21EbB6jNyHNq-fvMcmZg';
+const supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+
 function initWebSocket() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    ws = new WebSocket(`${protocol}//${window.location.host}`);
-
-    ws.onopen = () => {
-        document.getElementById('ws-status')?.classList.add('connected');
-        console.log('Connecté au serveur en temps réel');
-    };
-
-    ws.onclose = () => {
-        document.getElementById('ws-status')?.classList.remove('connected');
-        console.log('Déconnecté, reconnexion dans 3s...');
-        setTimeout(initWebSocket, 3000);
-    };
-
-    ws.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-        if (msg.type === 'UPDATE_STATE') {
-            loadData(); // Rafraîchit les données dès qu'un changement serveur se produit
-        }
-    };
+    if (!supabase) return;
+    
+    // Subscribe to public schema changes
+    supabase.channel('public-updates')
+      .on('postgres_changes', { event: '*', schema: 'public' }, payload => {
+          console.log('Changement détecté dans Supabase:', payload);
+          loadData();
+      })
+      .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+              document.getElementById('ws-status')?.classList.add('connected');
+              console.log('Connecté au serveur en temps réel (Supabase)');
+          } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+              document.getElementById('ws-status')?.classList.remove('connected');
+              console.log('Déconnecté, tentative de reconnexion...');
+              setTimeout(initWebSocket, 3000);
+          }
+      });
 }
 
 // Afficher un message temporaire
