@@ -171,9 +171,7 @@ function updateVendorUI() {
     
     let options = '<option value="">-- Choisissez votre nom --</option>';
     currentVendors.forEach(v => {
-        const souches = getVendorSouches(v);
-        const soucheLabel = souches.length > 1 ? `${souches.length} souches (${v.quota} tickets)` : `1 souche (${v.quota} tickets)`;
-        options += `<option value="${v.id}" ${currentVal == v.id ? 'selected' : ''}>${v.name} — ${soucheLabel}</option>`;
+        options += `<option value="${v.id}" ${currentVal == v.id ? 'selected' : ''}>${v.name}</option>`;
     });
     select.innerHTML = options;
 
