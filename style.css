@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
 
 :root {
-    --bg-color: #1a1e16;
-    --text-color: #f2f2eb;
-    --primary: #6c7a52;
-    --primary-glow: rgba(108, 122, 82, 0.4);
-    --secondary: #2c3325;
-    --surface: rgba(255, 255, 255, 0.06);
-    --surface-border: rgba(255, 255, 255, 0.15);
-    --success: #8bb36b;
-    --danger: #d16b6b;
+    --bg-color: #0c0d10;
+    --text-color: #f5f5f7;
+    --primary: #e61c24;
+    --primary-glow: rgba(230, 28, 36, 0.45);
+    --secondary: #1a1b22;
+    --surface: rgba(255, 255, 255, 0.05);
+    --surface-border: rgba(255, 255, 255, 0.12);
+    --success: #2ecc71;
+    --danger: #e74c3c;
     --font-main: 'Inter', sans-serif;
     --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -19,8 +19,8 @@
 
 body {
     font-family: var(--font-main);
-    background: radial-gradient(circle at top right, #2a3322, var(--bg-color) 40%),
-                radial-gradient(circle at bottom left, #23291d, var(--bg-color) 40%);
+    background: radial-gradient(circle at top right, #240a0c, var(--bg-color) 45%),
+                radial-gradient(circle at bottom left, #1a0809, var(--bg-color) 45%);
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
@@ -61,8 +61,24 @@ h2 { font-size: 1.8rem; }
 }
 
 .main-title .date {
-    background: linear-gradient(135deg, var(--primary), #ff99aa);
+    background: linear-gradient(135deg, #ff3b47, #ff99aa);
     -webkit-background-clip: text;
+}
+
+.event-info-box {
+    margin-top: -15px;
+    margin-bottom: 25px;
+    padding: 12px 18px;
+    background: rgba(230, 28, 36, 0.08);
+    border: 1px solid rgba(230, 28, 36, 0.25);
+    border-radius: 16px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    animation: fadeUp 0.8s var(--ease-out) 0.15s both;
+}
+.event-info-box strong {
+    color: #ff525d;
 }
 
 /* Main Poster Image */
@@ -225,6 +241,60 @@ header {
     border-radius: 20px;
     transition: width 1s var(--spring), background-color 0.3s;
     box-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Souches & Badges */
+.souche-badge-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0;
+}
+
+.souche-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    background: rgba(230, 28, 36, 0.12);
+    border: 1px solid rgba(230, 28, 36, 0.3);
+    color: #ff7a83;
+    border-radius: 999px;
+}
+
+.souche-breakdown {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.souche-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.souche-row .souche-name {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.souche-row .souche-status {
+    font-weight: 600;
+    color: #ff7a83;
+}
+
+.souche-row .souche-status.full {
+    color: var(--success);
 }
 
 /* Vendor List */

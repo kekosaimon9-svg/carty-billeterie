@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Admin - SHOWCASE CARTY</title>
+    <title>Espace Admin - SHOWCASE ITACHI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="back-link">← Retour Accueil</a>
-        <div><span class="ws-status" id="ws-status" title="Statut temps réel"></span></div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Showcase Itachi 20/11</span>
+            <span class="ws-status" id="ws-status" title="Statut temps réel"></span>
+        </div>
     </header>
 
     <div class="container">
@@ -28,20 +31,29 @@
         <!-- Section Dashboard (cachée par défaut) -->
         <div id="dashboard-section" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>Tableau de Bord</h2>
+                <div>
+                    <h2>Tableau de Bord</h2>
+                    <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Showcase General Itachi — César Club</p>
+                </div>
                 <button id="btn-logout" class="btn btn-small btn-secondary">Déconnexion</button>
             </div>
 
             <!-- Total Global -->
             <div class="card">
-                <h3>Total Global</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h3>Total Global</h3>
+                    <span style="font-size: 0.85rem; padding: 3px 10px; background: rgba(230,28,36,0.15); border: 1px solid rgba(230,28,36,0.3); border-radius: 999px; color: #ff707a; font-weight: 600;">6 Souches • 114 Tickets</span>
+                </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                    <p>Billets vendus : <strong id="global-sales">0</strong> / <span id="global-quota">0</span></p>
-                    <p style="color: var(--success); font-weight: 900; font-size: 1.2rem;" id="global-revenue">0 DH</p>
+                    <p>Billets vendus : <strong id="global-sales">0</strong> / <span id="global-quota">114</span></p>
+                    <p style="color: var(--success); font-weight: 900; font-size: 1.25rem;" id="global-revenue">0 DH</p>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="global-progress"></div>
                 </div>
+                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-top: 10px;">
+                    💰 Prix prévente : <strong>200 DH / billet</strong> • Objectif : <strong>22 800 DH</strong>
+                </p>
             </div>
 
             <!-- Ajouter un vendeur -->
@@ -51,13 +63,16 @@
                     <input type="text" id="new-vendor-name" class="form-control" placeholder="Nom du vendeur">
                 </div>
                 <div class="form-group">
-                    <input type="number" id="new-vendor-quota" class="form-control" placeholder="Quota" min="1">
+                    <input type="number" id="new-vendor-quota" class="form-control" placeholder="Quota de tickets (ex: 19 pour 1 souche)" min="1">
                 </div>
                 <button id="btn-add-vendor" class="btn btn-secondary">Ajouter</button>
             </div>
 
             <!-- Liste des vendeurs -->
-            <h3>Liste des Vendeurs</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3>Répartition des 5 Vendeurs</h3>
+                <span style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Contrôle des souches</span>
+            </div>
             <div id="vendors-list">
                 <!-- Rempli en JS -->
             </div>

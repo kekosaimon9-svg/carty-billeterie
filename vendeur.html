@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Vendeur - SHOWCASE CARTY</title>
+    <title>Espace Vendeur - SHOWCASE ITACHI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="back-link">← Retour Accueil</a>
-        <div><span class="ws-status" id="ws-status" title="Statut temps réel"></span></div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Showcase Itachi 20/11</span>
+            <span class="ws-status" id="ws-status" title="Statut temps réel"></span>
+        </div>
     </header>
 
     <div class="container">
@@ -27,11 +30,20 @@
         </div>
 
         <div id="vendor-dashboard" class="card" style="display: none;">
-            <h3 id="vendor-name-display">Nom du vendeur</h3>
-            <p>Ventes : <strong id="vendor-sales">0</strong> / <span id="vendor-quota">0</span></p>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;">
+                <h3 id="vendor-name-display" style="margin-bottom: 4px;">Nom du vendeur</h3>
+                <span id="vendor-revenue" style="color: var(--success); font-weight: 900; font-size: 1.1rem;">0 DH</span>
+            </div>
+            
+            <div id="vendor-souches-display" class="souche-badge-list"></div>
+
+            <p style="margin-top: 8px;">Ventes : <strong id="vendor-sales">0</strong> / <span id="vendor-quota">0</span> tickets</p>
             <div class="progress-container">
                 <div class="progress-bar" id="vendor-progress"></div>
             </div>
+
+            <!-- Détail individuel des souches -->
+            <div id="vendor-souches-detail" class="souche-breakdown" style="margin-top: 15px;"></div>
             
             <div class="form-group" style="margin-top: 20px;">
                 <label for="sell-quantity">Nombre de ticket vendu :</label>
