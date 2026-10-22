@@ -307,7 +307,6 @@ header {
     border: 1px solid var(--surface-border);
     border-radius: 18px;
     margin-bottom: 12px;
-    animation: fadeUp 0.5s var(--spring) both;
     transition: transform 0.3s var(--spring), background 0.3s;
 }
 .vendor-list-item:hover { transform: scale(1.02); background: rgba(255,255,255,0.06); }

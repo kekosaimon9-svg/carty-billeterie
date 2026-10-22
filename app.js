@@ -67,19 +67,6 @@ function calculateSouchesBreakdown(vendor) {
     });
 }
 
-// Initialisation Supabase Client & Realtime avec fallback polling automatique
-const supabaseUrl = 'https://uztprrunvtzcjfkaxdiw.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dHBycnVudnR6Y2pma2F4ZGl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyOTk2NDcsImV4cCI6MjEwNTg3NTY0N30.gTOJ7xI3RXLRW7ejjgajhYc21EbB6jNyHNq-fvMcmZg';
-let supabaseClient = null;
-
-try {
-    if (window.supabase) {
-        supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-    }
-} catch (e) {
-    console.warn('Supabase local init bypassed, fallback actif.');
-}
-
 function setStatusConnected(connected) {
     const el = document.getElementById('ws-status');
     if (!el) return;
@@ -93,27 +80,12 @@ function setStatusConnected(connected) {
 }
 
 function initRealtime() {
-    // Statut vert actif par défaut via synchronisation continue
     setStatusConnected(true);
 
-    if (supabaseClient) {
-        try {
-            supabaseClient.channel('public-updates')
-                .on('postgres_changes', { event: '*', schema: 'public' }, () => {
-                    loadData();
-                })
-                .subscribe((status) => {
-                    if (status === 'SUBSCRIBED') {
-                        setStatusConnected(true);
-                    }
-                });
-        } catch (_) {}
-    }
-
-    // Polling régulier de sécurité pour assurer la synchronisation en direct
+    // Polling intelligent et silencieux toutes les 3.5 secondes
     if (!pollingInterval) {
         pollingInterval = setInterval(() => {
-            loadData(false); // charge discrètement
+            loadData(false); // Vérifie silencieusement en arrière-plan
         }, 3500);
     }
 }
@@ -137,18 +109,31 @@ const DEFAULT_FALLBACK_VENDORS = [
     { id: 5, name: 'Isabelle', quota: 19, sold: 0 }
 ];
 
-// Charger les données depuis l'API
+let lastDataFingerprint = '';
+
+// Charger les données depuis l'API sans clignotement
 async function loadData(showError = true) {
     try {
         const res = await fetch('/api/data');
         if (!res.ok) throw new Error('Erreur réseau');
         const data = await res.json();
-        currentVendors = data.vendors && data.vendors.length > 0 ? data.vendors : DEFAULT_FALLBACK_VENDORS;
+        const incomingVendors = data.vendors && data.vendors.length > 0 ? data.vendors : DEFAULT_FALLBACK_VENDORS;
+        
+        // Empreinte : si les chiffres n'ont pas changé, NE PAS toucher au DOM (évite tout clignotement / recharge)
+        const fingerprint = JSON.stringify(incomingVendors);
+        if (fingerprint === lastDataFingerprint) {
+            setStatusConnected(true);
+            return;
+        }
+
+        lastDataFingerprint = fingerprint;
+        currentVendors = incomingVendors;
         setStatusConnected(true);
         updateUI();
     } catch (err) {
         if (currentVendors.length === 0) {
             currentVendors = DEFAULT_FALLBACK_VENDORS;
+            lastDataFingerprint = JSON.stringify(currentVendors);
             updateUI();
         }
         if (showError) {
