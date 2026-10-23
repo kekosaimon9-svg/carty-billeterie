@@ -318,6 +318,14 @@ function updateAdminUI() {
 
     const globalRevenueEl = document.getElementById('global-revenue');
     if (globalRevenueEl) globalRevenueEl.textContent = (globalSold * TICKET_PRICE).toLocaleString('fr-FR') + ' DH';
+
+    // Objectif financier total attendu calculé dynamiquement
+    const targetRevenue = globalQuota * TICKET_PRICE;
+    const targetRevenueEl = document.getElementById('global-target-revenue');
+    if (targetRevenueEl) targetRevenueEl.textContent = targetRevenue.toLocaleString('fr-FR') + ' DH';
+
+    const targetTicketsEl = document.getElementById('global-target-tickets');
+    if (targetTicketsEl) targetTicketsEl.textContent = globalQuota;
     
     const globalPercent = globalQuota > 0 ? Math.round((globalSold / globalQuota) * 100) : 0;
     const globalRemaining = Math.max(0, (globalQuota || 114) - globalSold);
