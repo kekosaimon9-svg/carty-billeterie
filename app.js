@@ -172,49 +172,44 @@ function displayVendorDashboard(vendor) {
     if (!dash) return;
     dash.style.display = 'block';
 
+    const pct = vendor.quota > 0 ? Math.round((vendor.sold / vendor.quota) * 100) : 0;
+    const remaining = Math.max(0, vendor.quota - vendor.sold);
+
     document.getElementById('vendor-name-display').textContent = vendor.name;
     document.getElementById('vendor-sales').textContent = vendor.sold;
     document.getElementById('vendor-quota').textContent = vendor.quota;
     
+    const quotaMaxEl = document.getElementById('vendor-quota-max');
+    if (quotaMaxEl) quotaMaxEl.textContent = `Max: ${vendor.quota}`;
+
+    const remainingEl = document.getElementById('vendor-remaining-text');
+    if (remainingEl) {
+        remainingEl.textContent = remaining > 0 ? `${remaining} ticket${remaining > 1 ? 's' : ''} restant${remaining > 1 ? 's' : ''}` : '✅ Quota complet !';
+    }
+
+    const pctBadge = document.getElementById('vendor-percent-badge');
+    if (pctBadge) {
+        pctBadge.textContent = `${pct}%`;
+        if (pct >= 100) pctBadge.classList.add('full');
+        else pctBadge.classList.remove('full');
+    }
+
     const revenueEl = document.getElementById('vendor-revenue');
     if (revenueEl) {
         revenueEl.textContent = (vendor.sold * TICKET_PRICE).toLocaleString('fr-FR') + ' DH';
     }
 
-    // Afficher les badges de souches
-    const badgesContainer = document.getElementById('vendor-souches-display');
-    const breakdown = calculateSouchesBreakdown(vendor);
-    if (badgesContainer) {
-        badgesContainer.innerHTML = breakdown.map(s => `
-            <span class="souche-chip">
-                🎟️ ${s.name} (${s.capacity} tickets • ${s.range})
-            </span>
-        `).join('');
-    }
-
-    // Barre de progression
-    const percent = vendor.quota > 0 ? Math.min((vendor.sold / vendor.quota) * 100, 100) : 0;
+    // Barre de jauge stylée
     const bar = document.getElementById('vendor-progress');
     if (bar) {
-        bar.style.width = percent + '%';
-        if (percent >= 100) bar.style.backgroundColor = 'var(--danger)';
-        else bar.style.backgroundColor = 'var(--primary)';
-    }
-
-    // Détail individuel des souches
-    const detailContainer = document.getElementById('vendor-souches-detail');
-    if (detailContainer) {
-        detailContainer.innerHTML = `
-            <div style="font-weight: 600; margin-bottom: 6px; color: rgba(255,255,255,0.9);">
-                Suivi individuel des souches attribuées :
-            </div>
-            ${breakdown.map(s => `
-                <div class="souche-row">
-                    <span class="souche-name">${s.name} <small style="color: rgba(255,255,255,0.5);">(${s.range})</small></span>
-                    <span class="souche-status ${s.isFull ? 'full' : ''}">${s.sold} / ${s.capacity} • ${s.statusLabel}</span>
-                </div>
-            `).join('')}
-        `;
+        bar.style.width = Math.min(pct, 100) + '%';
+        if (pct >= 100) {
+            bar.style.background = 'linear-gradient(90deg, #1b8a47, #2ecc71)';
+            bar.style.boxShadow = '0 0 16px rgba(46, 204, 113, 0.7)';
+        } else {
+            bar.style.background = 'linear-gradient(90deg, #990f14 0%, #e61c24 50%, #ff4d58 90%, #ff858e 100%)';
+            bar.style.boxShadow = '0 0 16px rgba(230, 28, 36, 0.75)';
+        }
     }
 }
 
@@ -272,39 +267,38 @@ function updateAdminUI() {
         globalSold += v.sold;
         globalQuota += v.quota;
         
-        const delay = (index * 0.08).toFixed(2);
         const revenue = v.sold * TICKET_PRICE;
-        const breakdown = calculateSouchesBreakdown(v);
-        const souchesBadgeText = breakdown.map(s => `${s.name} (${s.capacity})`).join(' + ');
+        const pct = v.quota > 0 ? Math.round((v.sold / v.quota) * 100) : 0;
+        const remaining = Math.max(0, v.quota - v.sold);
 
         html += `
-            <div class="vendor-list-item" style="animation-delay: ${delay}s">
+            <div class="vendor-list-item">
                 <div class="vendor-info" style="flex: 1;">
                     <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                        <strong style="font-size: 1.2rem; color: #fff;">${v.name}</strong>
-                        <span style="color: var(--success); font-weight: 700; font-size: 1.05rem;">💰 ${revenue.toLocaleString('fr-FR')} DH</span>
+                        <strong style="font-size: 1.25rem; color: #fff;">${v.name}</strong>
+                        <span style="color: var(--success); font-weight: 800; font-size: 1.15rem;">💰 ${revenue.toLocaleString('fr-FR')} DH</span>
                     </div>
 
-                    <div class="souche-badge-list">
-                        <span class="souche-chip">🏷️ ${v.quota === 38 ? '2 souches' : '1 souche'} : ${souchesBadgeText}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 4px;">
+                        <span style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">
+                            Tickets : <strong style="color: #fff; font-size: 1.05rem;">${v.sold}</strong> / ${v.quota} vendus
+                        </span>
+                        <span class="gauge-percent-badge ${pct >= 100 ? 'full' : ''}">${pct}%</span>
                     </div>
 
-                    <div style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-top: 4px;">
-                        Vendus : <strong>${v.sold}</strong> / ${v.quota} tickets
+                    <!-- Jauge ultra stylée par vendeur -->
+                    <div class="progress-container" style="height: 12px; margin-top: 4px;">
+                        <div class="progress-bar" style="width: ${Math.min(pct, 100)}%;"></div>
                     </div>
 
-                    <!-- Découpage individuel par souche -->
-                    <div class="souche-breakdown">
-                        ${breakdown.map(s => `
-                            <div class="souche-row">
-                                <span class="souche-name">${s.name} <small style="color:rgba(255,255,255,0.45); font-weight: normal;">(${s.range})</small></span>
-                                <span class="souche-status ${s.isFull ? 'full' : ''}"><strong>${s.sold}</strong> / ${s.capacity} tickets (${s.statusLabel})</span>
-                            </div>
-                        `).join('')}
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 5px;">
+                        <span>0 ticket</span>
+                        <span style="color: #ff858e; font-weight: 600;">${remaining > 0 ? remaining + ' restant' + (remaining > 1 ? 's' : '') : '✅ Quota complet !'}</span>
+                        <span>Max : ${v.quota}</span>
                     </div>
                 </div>
 
-                <div class="vendor-actions" style="margin-top: 10px;">
+                <div class="vendor-actions" style="margin-top: 12px;">
                     <button class="btn btn-small btn-secondary" onclick="editQuota(${v.id}, ${v.quota})">Modifier</button>
                     <button class="btn btn-small btn-danger" onclick="deleteVendor(${v.id})">Supprimer</button>
                 </div>
@@ -315,7 +309,7 @@ function updateAdminUI() {
     if (currentVendors.length === 0) html = '<p>Aucun vendeur trouvé.</p>';
     list.innerHTML = html;
 
-    // Total Global
+    // Total Global & Jauge Globale
     const globalSalesEl = document.getElementById('global-sales');
     if (globalSalesEl) globalSalesEl.textContent = globalSold;
     
@@ -325,12 +319,31 @@ function updateAdminUI() {
     const globalRevenueEl = document.getElementById('global-revenue');
     if (globalRevenueEl) globalRevenueEl.textContent = (globalSold * TICKET_PRICE).toLocaleString('fr-FR') + ' DH';
     
-    const percent = globalQuota > 0 ? Math.min((globalSold / globalQuota) * 100, 100) : 0;
+    const globalPercent = globalQuota > 0 ? Math.round((globalSold / globalQuota) * 100) : 0;
+    const globalRemaining = Math.max(0, (globalQuota || 114) - globalSold);
+
+    const globalPctBadge = document.getElementById('global-percent-badge');
+    if (globalPctBadge) {
+        globalPctBadge.textContent = `${globalPercent}%`;
+        if (globalPercent >= 100) globalPctBadge.classList.add('full');
+        else globalPctBadge.classList.remove('full');
+    }
+
+    const globalRemainingEl = document.getElementById('global-remaining-text');
+    if (globalRemainingEl) {
+        globalRemainingEl.textContent = globalRemaining > 0 ? `${globalRemaining} ticket${globalRemaining > 1 ? 's' : ''} restant${globalRemaining > 1 ? 's' : ''}` : '🎉 Tous les billets sont vendus !';
+    }
+
     const bar = document.getElementById('global-progress');
     if (bar) {
-        bar.style.width = percent + '%';
-        if (percent >= 100) bar.style.backgroundColor = 'var(--danger)';
-        else bar.style.backgroundColor = 'var(--primary)';
+        bar.style.width = Math.min(globalPercent, 100) + '%';
+        if (globalPercent >= 100) {
+            bar.style.background = 'linear-gradient(90deg, #1b8a47, #2ecc71)';
+            bar.style.boxShadow = '0 0 20px rgba(46, 204, 113, 0.8)';
+        } else {
+            bar.style.background = 'linear-gradient(90deg, #990f14 0%, #e61c24 50%, #ff4d58 90%, #ff858e 100%)';
+            bar.style.boxShadow = '0 0 16px rgba(230, 28, 36, 0.75)';
+        }
     }
 }
 

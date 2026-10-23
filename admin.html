@@ -42,16 +42,21 @@
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <h3>Total Global</h3>
-                    <span style="font-size: 0.85rem; padding: 3px 10px; background: rgba(230,28,36,0.15); border: 1px solid rgba(230,28,36,0.3); border-radius: 999px; color: #ff707a; font-weight: 600;">6 Souches • 114 Tickets</span>
+                    <span class="gauge-percent-badge" id="global-percent-badge">0%</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                    <p>Billets vendus : <strong id="global-sales">0</strong> / <span id="global-quota">114</span></p>
-                    <p style="color: var(--success); font-weight: 900; font-size: 1.25rem;" id="global-revenue">0 DH</p>
+                    <p style="font-size: 1.05rem;">Billets vendus : <strong id="global-sales" style="font-size: 1.45rem; color: #fff;">0</strong> / <span id="global-quota">114</span></p>
+                    <p style="color: var(--success); font-weight: 900; font-size: 1.35rem;" id="global-revenue">0 DH</p>
                 </div>
-                <div class="progress-container">
+                <div class="progress-container" style="height: 20px; margin-top: 12px;">
                     <div class="progress-bar" id="global-progress"></div>
                 </div>
-                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+                    <span>0 ticket</span>
+                    <span id="global-remaining-text" style="color: #ff858e; font-weight: 700;">114 tickets restants</span>
+                    <span>Objectif : 114</span>
+                </div>
+                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
                     💰 Prix prévente : <strong>200 DH / billet</strong> • Objectif : <strong>22 800 DH</strong>
                 </p>
             </div>
@@ -63,15 +68,15 @@
                     <input type="text" id="new-vendor-name" class="form-control" placeholder="Nom du vendeur">
                 </div>
                 <div class="form-group">
-                    <input type="number" id="new-vendor-quota" class="form-control" placeholder="Quota de tickets (ex: 19 pour 1 souche)" min="1">
+                    <input type="number" id="new-vendor-quota" class="form-control" placeholder="Quota de tickets (ex: 19 ou 38)" min="1">
                 </div>
                 <button id="btn-add-vendor" class="btn btn-secondary">Ajouter</button>
             </div>
 
             <!-- Liste des vendeurs -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3>Répartition des 5 Vendeurs</h3>
-                <span style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Contrôle des souches</span>
+                <h3>Liste des 5 Vendeurs</h3>
+                <span style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Objectif : 114 tickets</span>
             </div>
             <div id="vendors-list">
                 <!-- Rempli en JS -->

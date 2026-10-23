@@ -31,21 +31,29 @@
 
         <div id="vendor-dashboard" class="card" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;">
-                <h3 id="vendor-name-display" style="margin-bottom: 4px;">Nom du vendeur</h3>
-                <span id="vendor-revenue" style="color: var(--success); font-weight: 900; font-size: 1.1rem;">0 DH</span>
+                <h3 id="vendor-name-display" style="margin-bottom: 0;">Nom du vendeur</h3>
+                <span id="vendor-revenue" style="color: var(--success); font-weight: 900; font-size: 1.25rem;">0 DH</span>
             </div>
-            
-            <div id="vendor-souches-display" class="souche-badge-list"></div>
 
-            <p style="margin-top: 8px;">Ventes : <strong id="vendor-sales">0</strong> / <span id="vendor-quota">0</span> tickets</p>
-            <div class="progress-container">
+            <!-- Jauge ultra stylée -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; margin-bottom: 6px;">
+                <span style="font-size: 0.95rem; color: rgba(255,255,255,0.85);">
+                    Tickets vendus : <strong id="vendor-sales" style="color: #fff; font-size: 1.15rem;">0</strong> / <span id="vendor-quota">0</span>
+                </span>
+                <span class="gauge-percent-badge" id="vendor-percent-badge">0%</span>
+            </div>
+
+            <div class="progress-container" style="height: 18px;">
                 <div class="progress-bar" id="vendor-progress"></div>
             </div>
 
-            <!-- Détail individuel des souches -->
-            <div id="vendor-souches-detail" class="souche-breakdown" style="margin-top: 15px;"></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 6px;">
+                <span>0 ticket</span>
+                <span id="vendor-remaining-text" style="color: #ff858e; font-weight: 600;">0 restant</span>
+                <span id="vendor-quota-max">Max: 0</span>
+            </div>
             
-            <div class="form-group" style="margin-top: 20px;">
+            <div class="form-group" style="margin-top: 24px;">
                 <label for="sell-quantity">Nombre de ticket vendu :</label>
                 <input type="number" id="sell-quantity" class="form-control" value="1" min="1">
             </div>
